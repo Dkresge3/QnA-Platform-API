@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  qna_api:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - qna_db
+    environment:
+      - DB_HOST=qna_db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=mysecretpassword
+      - DB_NAME=qna_platform
+      - FLASK_APP=main.py
+
+  qna_db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: qna_platform
+    volumes:
+      - qna_db_data:/var/lib/mysql
+      - ./database/QnA_Platform_DB_Setup.sql:/docker-entrypoint-initdb.d/QnA_Platform_DB_Setup.sql
+
+volumes:
+  qna_db_data:
+
