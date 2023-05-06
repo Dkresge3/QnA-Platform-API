@@ -1,32 +1,26 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
-from app.config import Config
-from app.models import db
-from app.api import auth_bp, users_bp, questions_bp, answers_bp
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(config_class)
+app = Flask(__name__)
 
-    # Initialize CORS
-    CORS(app)
+@app.route('/')
+def home():
+    return jsonify({"message": "Welcome to the QnA Platform API!"}), 200
 
-    # Initialize database
-    db.init_app(app)
+@app.route('/api/v1/auth')
+def auth_stub():
+    return jsonify({"message": "Authentication endpoint stub"}), 200
 
-    # Register blueprints
-    app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
-    app.register_blueprint(users_bp, url_prefix='/api/v1/users')
-    app.register_blueprint(questions_bp, url_prefix='/api/v1/questions')
-    app.register_blueprint(answers_bp, url_prefix='/api/v1/answers')
+@app.route('/api/v1/users')
+def users_stub():
+    return jsonify({"message": "Users endpoint stub"}), 200
 
-    @app.route('/')
-    def home():
-        return jsonify({"message": "Welcome to the QnA Platform API!"}), 200
+@app.route('/api/v1/questions')
+def questions_stub():
+    return jsonify({"message": "Questions endpoint stub"}), 200
 
-    return app
+@app.route('/api/v1/answers')
+def answers_stub():
+    return jsonify({"message": "Answers endpoint stub"}), 200
 
 if __name__ == '__main__':
-    app = create_app()
     app.run(host='0.0.0.0', port=5000)
-
